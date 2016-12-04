@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>streamlink</id>
+    <version>0.1.0</version>
+    <packageSourceUrl>https://github.com/scowalt/chocolatey-streamlink</packageSourceUrl>
+    <owners>Scott Walters</owners>
+    <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/win32/doggo.ico</iconUrl>
+
+    <title>Streamlink</title>
+    <authors>streamlink</authors>
+    <projectUrl>https://streamlink.github.io/</projectUrl>
+    <copyright>Copyright (c) 2011-2016, Christopher Rosell</copyright>
+    <licenseUrl>https://github.com/streamlink/streamlink/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/streamlink/streamlink</projectSourceUrl>
+    <docsUrl>https://streamlink.github.io/</docsUrl>
+    <bugTrackerUrl>https://github.com/streamlink/streamlink/issues</bugTrackerUrl>
+    <tags>streamlink twitch livestreamer</tags>
+    <summary>Streamlink is a CLI utility that pipes flash videos from online streaming services to a variety of video players such as VLC, or alternatively, a browser.</summary>
+    <description>Streamlink is a CLI utility that pipes flash videos from online streaming services to a variety of video players such as VLC, or alternatively, a browser.
+
+The main purpose of streamlink is to convert CPU-heavy flash plugins to a less CPU-intensive format.
+
+Streamlink is a fork of the [livestreamer](https://github.com/chrippa/livestreamer) project.</description>
+    <releaseNotes>A major update to Streamlink.
+
+With this release, we include a Windows binary as well as numerous plugin changes and fixes.
+
+The main features are:
+
+  - Windows binary (and generation!) thanks to the fabulous work by @beardypig
+  - Multiple plugin fixes
+  - Remove unneeded run-as-root (no more warning you when you run as root, we trust that you know what you're doing)
+  - Fix stream quality naming issue</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
