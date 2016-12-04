@@ -1,3 +1,6 @@
+# Chocolatey packages (should be generated, not checked into VC)
+*.nupkg
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
