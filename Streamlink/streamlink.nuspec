@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>streamlink</id>
-    <version>0.1.0</version>
+    <version>0.1.0.20161206</version>
     <packageSourceUrl>https://github.com/scowalt/chocolatey-streamlink</packageSourceUrl>
     <owners>Scott Walters</owners>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/win32/doggo.ico</iconUrl>
@@ -17,7 +17,7 @@
     <projectSourceUrl>https://github.com/streamlink/streamlink</projectSourceUrl>
     <docsUrl>https://streamlink.github.io/</docsUrl>
     <bugTrackerUrl>https://github.com/streamlink/streamlink/issues</bugTrackerUrl>
-    <tags>streamlink twitch livestreamer</tags>
+    <tags>streamlink admin twitch livestreamer</tags>
     <summary>Streamlink is a CLI utility that pipes flash videos from online streaming services to a variety of video players such as VLC, or alternatively, a browser.</summary>
     <description>Streamlink is a CLI utility that pipes flash videos from online streaming services to a variety of video players such as VLC, or alternatively, a browser.
 
@@ -34,6 +34,9 @@ The main features are:
   - Multiple plugin fixes
   - Remove unneeded run-as-root (no more warning you when you run as root, we trust that you know what you're doing)
   - Fix stream quality naming issue</releaseNotes>
+    <dependencies>
+      <dependency id="vcredist2015" version="14.0.24215" />
+    </dependencies>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
