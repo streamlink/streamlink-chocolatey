@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'Streamlink'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://github.com/streamlink/streamlink/releases/download/0.1.0/streamlink-0.1.0.exe'
+$url        = "https://github.com/streamlink/streamlink/releases/download/$env:chocolateyPackageVersion/streamlink-$env:chocolateyPackageVersion.exe"
 
 $packageArgs = @{
   packageName   = $packageName
@@ -13,7 +13,7 @@ $packageArgs = @{
 
   softwareName  = 'Streamlink*'
 
-  checksum      = '18CEC2BF2D8C4DFB158F0E5AB5B4658829A0099C2E2AA558FA5EDF236471420B'
+  checksum      = 'E647D98C2BDDA019EE6CEC2D60D78D404EF2F0BC462058C0D886B54F23BE98CC'
   checksumType  = 'sha256'
 
   silentArgs   = '/S'
