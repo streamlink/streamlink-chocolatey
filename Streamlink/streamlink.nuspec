@@ -24,16 +24,15 @@
 The main purpose of streamlink is to convert CPU-heavy flash plugins to a less CPU-intensive format.
 
 Streamlink is a fork of the [livestreamer](https://github.com/chrippa/livestreamer) project.</description>
-    <releaseNotes>A major update to Streamlink.
-
-With this release, we include a Windows binary as well as numerous plugin changes and fixes.
+    <releaseNotes>We've done numerous changes to plugins as well as fixed quite a few which were originally failing. Among these changes are updated docs as well as general UI/UX cleaning with console output.
 
 The main features are:
 
-  - Windows binary (and generation!) thanks to the fabulous work by @beardypig
-  - Multiple plugin fixes
-  - Remove unneeded run-as-root (no more warning you when you run as root, we trust that you know what you're doing)
-  - Fix stream quality naming issue</releaseNotes>
+- Additional plugins added
+- Plugin fixes
+- Cleaned up console output
+- Additional documentation (contribution, installation instructions)
+- Again, thank you everyone whom contributed to this release! :D</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
