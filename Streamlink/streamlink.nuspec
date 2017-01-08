@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>streamlink</id>
-    <version>0.1.0.20161206</version>
+    <version>0.2.0</version>
     <packageSourceUrl>https://github.com/scowalt/chocolatey-streamlink</packageSourceUrl>
     <owners>Scott Walters</owners>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/win32/doggo.ico</iconUrl>
@@ -24,19 +24,15 @@
 The main purpose of streamlink is to convert CPU-heavy flash plugins to a less CPU-intensive format.
 
 Streamlink is a fork of the [livestreamer](https://github.com/chrippa/livestreamer) project.</description>
-    <releaseNotes>A major update to Streamlink.
-
-With this release, we include a Windows binary as well as numerous plugin changes and fixes.
+    <releaseNotes>We've done numerous changes to plugins as well as fixed quite a few which were originally failing. Among these changes are updated docs as well as general UI/UX cleaning with console output.
 
 The main features are:
 
-  - Windows binary (and generation!) thanks to the fabulous work by @beardypig
-  - Multiple plugin fixes
-  - Remove unneeded run-as-root (no more warning you when you run as root, we trust that you know what you're doing)
-  - Fix stream quality naming issue</releaseNotes>
-    <dependencies>
-      <dependency id="vcredist2015" version="14.0.24215" />
-    </dependencies>
+- Additional plugins added
+- Plugin fixes
+- Cleaned up console output
+- Additional documentation (contribution, installation instructions)
+- Again, thank you everyone whom contributed to this release! :D</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
