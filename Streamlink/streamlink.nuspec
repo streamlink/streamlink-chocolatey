@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>streamlink</id>
-    <version>0.2.0</version>
+    <version>0.3.2</version>
     <packageSourceUrl>https://github.com/scowalt/chocolatey-streamlink</packageSourceUrl>
     <owners>Scott Walters</owners>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/win32/doggo.ico</iconUrl>
