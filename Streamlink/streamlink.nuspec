@@ -3,8 +3,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>streamlink</id>
-    <version>0.3.2</version>
-    <packageSourceUrl>https://github.com/scowalt/chocolatey-streamlink</packageSourceUrl>
+    <version>0.4.0</version>
+    <packageSourceUrl>https://github.com/streamlink/streamlink-chocolatey</packageSourceUrl>
     <owners>Scott Walters</owners>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/win32/doggo.ico</iconUrl>
 
@@ -24,15 +24,7 @@
 The main purpose of streamlink is to convert CPU-heavy flash plugins to a less CPU-intensive format.
 
 Streamlink is a fork of the [livestreamer](https://github.com/chrippa/livestreamer) project.</description>
-    <releaseNotes>We've done numerous changes to plugins as well as fixed quite a few which were originally failing. Among these changes are updated docs as well as general UI/UX cleaning with console output.
-
-The main features are:
-
-- Additional plugins added
-- Plugin fixes
-- Cleaned up console output
-- Additional documentation (contribution, installation instructions)
-- Again, thank you everyone whom contributed to this release! :D</releaseNotes>
+    <releaseNotes>https://github.com/streamlink/streamlink/releases/tag/0.4.0</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
