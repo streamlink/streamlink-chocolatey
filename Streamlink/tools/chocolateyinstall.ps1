@@ -13,7 +13,7 @@ $packageArgs = @{
 
   softwareName  = 'Streamlink*'
 
-  checksum      = 'daa46bf8321c69f9f07effcb3e323e578607ec3a99b3845a3c13dc0f306ecfab'
+  checksum      = '632e03be184352b49b857e7a5eff18bf2905373b5364a766a6e73287ff379340'
   checksumType  = 'sha256'
 
   silentArgs   = '/S'
