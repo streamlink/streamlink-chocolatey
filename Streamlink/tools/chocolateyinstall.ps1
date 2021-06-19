@@ -13,11 +13,15 @@ $packageArgs = @{
 
   softwareName  = 'Streamlink*'
 
-  checksum      = '3c27d90cfe1dd862cc56538e97efc686c2b9ece431fda3d6cd81163284ac2016'
+  checksum      = 'ca6b9664ae56892ae6a003bac8778a1458978e6457411ca4d17e2da26c2a0b53'
   checksumType  = 'sha256'
 
   silentArgs   = '/S'
   validExitCodes= @(0)
 }
+
+# v2.2.0: Changed default config file path (old path deprecated)
+Get-ChildItem -Path "$env:APPDATA\streamlink" streamlinkrc.* | Rename-Item -NewName { $_.Name -replace 'streamlinkrc','config' } -ErrorAction SilentlyContinue
+
 
 Install-ChocolateyPackage @packageArgs
