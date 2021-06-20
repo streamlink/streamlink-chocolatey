@@ -20,8 +20,4 @@ $packageArgs = @{
   validExitCodes= @(0)
 }
 
-# v2.2.0: Changed default config file path (old path deprecated)
-Get-ChildItem -Path "$env:APPDATA\streamlink" streamlinkrc.* | Rename-Item -NewName { $_.Name -replace 'streamlinkrc','config' } -ErrorAction SilentlyContinue
-
-
 Install-ChocolateyPackage @packageArgs
