@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>streamlink</id>
-    <version>2.3.0</version>
+    <version>2.4.0</version>
     <packageSourceUrl>https://github.com/streamlink/streamlink-chocolatey</packageSourceUrl>
     <owners>Scott Walters</owners>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/icon.svg</iconUrl>
@@ -24,7 +24,7 @@
 The main purpose of Streamlink is to avoid resource-heavy and unoptimized websites, while still allowing the user to enjoy various streamed content.
 
 Streamlink was forked from [Livestreamer](https://github.com/chrippa/livestreamer), which is no longer maintained.</description>
-    <releaseNotes>https://github.com/streamlink/streamlink/releases/tag/2.3.0</releaseNotes>
+    <releaseNotes>https://github.com/streamlink/streamlink/releases/tag/2.4.0</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
