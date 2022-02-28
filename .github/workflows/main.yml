@@ -1,8 +1,9 @@
 name: Update package from Github
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '5 4 * * *'
+  # Blocked by https://github.com/streamlink/streamlink-chocolatey/issues/69
+  # schedule:
+    # - cron: '5 4 * * *'
 
 jobs:
   github-check:
