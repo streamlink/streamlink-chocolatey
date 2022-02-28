@@ -1,5 +1,8 @@
-﻿
-$ErrorActionPreference = 'Stop';
+﻿$ErrorActionPreference = 'Stop';
+
+If ([Environment]::OSVersion.version.major -lt '10') {
+    Throw "Minimum required OS version is Windows 10"
+}
 
 $packageName= 'Streamlink'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
