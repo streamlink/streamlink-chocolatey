@@ -1,9 +1,12 @@
 name: Update package from Github
 on:
   workflow_dispatch:
-  # Blocked by https://github.com/streamlink/streamlink-chocolatey/issues/69
-  # schedule:
-    # - cron: '5 4 * * *'
+  schedule:
+    - cron: '5 4 * * *'
+
+permissions:
+  # Required for add-and-commit
+  contents: write
 
 jobs:
   github-check:
@@ -66,9 +69,10 @@ jobs:
       - name: Pack
         shell: pwsh
         run: cd Streamlink; choco pack
-      - name: Push
-        shell: pwsh
-        run: cd Streamlink; choco push --api-key ${{ secrets.CHOCOLATEY_API_KEY }}
+      # Temporarily disable for repo to catch up
+      # - name: Push
+      #   shell: pwsh
+      #   run: cd Streamlink; choco push --api-key ${{ secrets.CHOCOLATEY_API_KEY }}
       - name: Commit changes back to the repository
         uses: EndBug/add-and-commit@v8
         with:
