@@ -1,0 +1,50 @@
+name: Update package
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '5 4 * * *'
+
+jobs:
+  streamlink-check:
+    runs-on: ubuntu-latest
+    outputs:
+      versionNumber: steps.latest-release.outputs.result
+      hasNewerVersion: steps.has-newer-version.outputs.hasNewerVersion
+      latestReleaseUrl: steps.download-url.outputs.result
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get current streamlink version
+        id: current-version
+        run: |
+          echo ::set-output name=version::$(scripts/get_nuspec_verison.py ./Streamlink/streamlink.nuspec)
+      - uses: actions/github-script@v6
+        id: latest-release
+        with:
+          script: |
+            const scripts = require('./scripts/github-release.js');
+            return await scripts.latestRelease({github, context});
+          result-encoding: string
+      - name: Compare versions
+        id: has-newer-version
+        run: |
+          echo ${{steps.current-version.outputs.version}}
+          echo ${{steps.latest-release.outputs.result}}
+          echo ::set-output name=hasNewerVersion::$(scripts/has_newer_version.py "${{steps.current-version.outputs.version}}" "${{steps.latest-release.outputs.result}}")
+      - name: Get download url (failure means no file found)
+        id: download-url
+        if: ${{ steps.has-newer-version.outputs.hasNewerVersion == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const scripts = require('./scripts/github-release.js');
+            return await scripts.latestReleaseUrl({github, context});
+          result-encoding: string
+
+  chocolatey-update:
+    runs-on: windows-latest
+    needs:
+      - streamlink-check
+    if: ${{ needs.streamlink-check.outputs.hasNewerVersion == 'true' }}
+    steps:
+      - name: Hello world
+        run: echo "Hello world"
