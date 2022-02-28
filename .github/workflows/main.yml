@@ -69,10 +69,9 @@ jobs:
       - name: Pack
         shell: pwsh
         run: cd Streamlink; choco pack
-      # Temporarily disable for repo to catch up
-      # - name: Push
-      #   shell: pwsh
-      #   run: cd Streamlink; choco push --api-key ${{ secrets.CHOCOLATEY_API_KEY }}
+      - name: Push
+        shell: pwsh
+        run: cd Streamlink; choco push --api-key ${{ secrets.CHOCOLATEY_API_KEY }}
       - name: Commit changes back to the repository
         uses: EndBug/add-and-commit@v8
         with:
