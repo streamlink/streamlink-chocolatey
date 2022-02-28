@@ -11,6 +11,7 @@ jobs:
       versionNumber: steps.latest-release.outputs.result
       hasNewerVersion: steps.has-newer-version.outputs.hasNewerVersion
       latestReleaseUrl: steps.download-url.outputs.result
+      exeSha: steps.generate-sha.outputs.exeSha
     steps:
       - uses: actions/checkout@v2
       - name: Get current streamlink version
@@ -39,6 +40,12 @@ jobs:
             const scripts = require('./scripts/github-release.js');
             return await scripts.latestReleaseUrl({github, context});
           result-encoding: string
+      - name: Generate a sha256 checksum for the download
+        id: generate-sha
+        if: ${{ steps.has-newer-version.outputs.hasNewerVersion == 'true' }}
+        run: |
+          wget -O new.exe ${{ steps.download-url.outputs.result }}
+          echo "::set-output name=exeSha::$(sha256sum new.exe | awk '{ print $1}')"
 
   chocolatey-update:
     runs-on: windows-latest
