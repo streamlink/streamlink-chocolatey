@@ -53,9 +53,19 @@ jobs:
       - streamlink-check
     if: ${{ needs.streamlink-check.outputs.hasNewerVersion == 'true' }}
     steps:
+      - uses: actions/checkout@v2
       - name: Inventory
         run: |
           echo ${{ needs.streamlink-check.outputs.oldVersionNumber }}
           echo ${{ needs.streamlink-check.outputs.newVersionNumber }}
           echo ${{ needs.streamlink-check.outputs.hasNewerVersion }}
           echo ${{ needs.streamlink-check.outputs.exeSha }}
+      - name: Update nuspec
+        run: |
+          ((Get-Content -path ./Streamlink/streamlink.nuspec -Raw) -replace '${{ needs.streamlink-check.outputs.oldVersionNumber }}','${{ needs.streamlink-check.outputs.newVersionNumber }}') | Set-Content -Path ./Streamlink/streamlink.nuspec
+      - name: Update install script
+        run: |
+          (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'" "checksum = '${{ needs.streamlink-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
+      - uses: EndBug/add-and-commit@v8
+        with:
+          branch: master
