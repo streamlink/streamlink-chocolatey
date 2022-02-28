@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = 'Stop';
 
 If ([Environment]::OSVersion.version.major -lt '10') {
     Throw "Minimum required OS version is Windows 10"
@@ -16,7 +16,7 @@ $packageArgs = @{
 
   softwareName  = 'Streamlink*'
 
-  checksum      = '4626a79c106230c822cb040e9e961608de69b3ceebbca538395e3c11b2613a54'
+  checksum = '178c3edf3d49f4e76b67e1ee9b9984eef21a079cbf1a732b99c7bc42a7eec762'
   checksumType  = 'sha256'
 
   silentArgs   = '/S'
@@ -24,3 +24,4 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
+
