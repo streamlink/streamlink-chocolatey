@@ -8,10 +8,10 @@ jobs:
   streamlink-check:
     runs-on: ubuntu-latest
     outputs:
-      versionNumber: steps.latest-release.outputs.result
-      hasNewerVersion: steps.has-newer-version.outputs.hasNewerVersion
-      latestReleaseUrl: steps.download-url.outputs.result
-      exeSha: steps.generate-sha.outputs.exeSha
+      newVersionNumber: ${{ steps.latest-release.outputs.result }}
+      oldVersionNumber: ${{ steps.current-version.outputs.version }}
+      hasNewerVersion: ${{ steps.has-newer-version.outputs.hasNewerVersion }}
+      exeSha: ${{ steps.generate-sha.outputs.exeSha }}
     steps:
       - uses: actions/checkout@v2
       - name: Get current streamlink version
@@ -48,10 +48,14 @@ jobs:
           echo "::set-output name=exeSha::$(sha256sum new.exe | awk '{ print $1}')"
 
   chocolatey-update:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs:
       - streamlink-check
     if: ${{ needs.streamlink-check.outputs.hasNewerVersion == 'true' }}
     steps:
-      - name: Hello world
-        run: echo "Hello world"
+      - name: Inventory
+        run: |
+          echo ${{ needs.streamlink-check.outputs.oldVersionNumber }}
+          echo ${{ needs.streamlink-check.outputs.newVersionNumber }}
+          echo ${{ needs.streamlink-check.outputs.hasNewerVersion }}
+          echo ${{ needs.streamlink-check.outputs.exeSha }}
