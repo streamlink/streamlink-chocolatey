@@ -67,7 +67,10 @@ jobs:
       - name: Update install script
         shell: pwsh
         run: |
-          (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'" "checksum = '${{ needs.streamlink-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
+          (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'", "checksum = '${{ needs.streamlink-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
+      - name: Pack
+        shell: pwsh
+        run: cd Streamlink; choco pack
       - uses: EndBug/add-and-commit@v8
         with:
           branch: master
