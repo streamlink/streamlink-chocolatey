@@ -1,11 +1,11 @@
-name: Update package
+name: Update package from Github
 on:
   workflow_dispatch:
   schedule:
     - cron: '5 4 * * *'
 
 jobs:
-  streamlink-check:
+  github-check:
     runs-on: ubuntu-latest
     outputs:
       newVersionNumber: ${{ steps.latest-release.outputs.result }}
@@ -50,24 +50,24 @@ jobs:
   chocolatey-update:
     runs-on: windows-latest
     needs:
-      - streamlink-check
-    if: ${{ needs.streamlink-check.outputs.hasNewerVersion == 'true' }}
+      - github-check
+    if: ${{ needs.github-check.outputs.hasNewerVersion == 'true' }}
     steps:
       - uses: actions/checkout@v2
       - name: Inventory
         run: |
-          echo ${{ needs.streamlink-check.outputs.oldVersionNumber }}
-          echo ${{ needs.streamlink-check.outputs.newVersionNumber }}
-          echo ${{ needs.streamlink-check.outputs.hasNewerVersion }}
-          echo ${{ needs.streamlink-check.outputs.exeSha }}
+          echo ${{ needs.github-check.outputs.oldVersionNumber }}
+          echo ${{ needs.github-check.outputs.newVersionNumber }}
+          echo ${{ needs.github-check.outputs.hasNewerVersion }}
+          echo ${{ needs.github-check.outputs.exeSha }}
       - name: Update nuspec
         shell: pwsh
         run: |
-          ((Get-Content -path ./Streamlink/streamlink.nuspec -Raw) -replace '${{ needs.streamlink-check.outputs.oldVersionNumber }}','${{ needs.streamlink-check.outputs.newVersionNumber }}') | Set-Content -Path ./Streamlink/streamlink.nuspec
+          ((Get-Content -path ./Streamlink/streamlink.nuspec -Raw) -replace '${{ needs.github-check.outputs.oldVersionNumber }}','${{ needs.github-check.outputs.newVersionNumber }}') | Set-Content -Path ./Streamlink/streamlink.nuspec
       - name: Update install script
         shell: pwsh
         run: |
-          (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'", "checksum = '${{ needs.streamlink-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
+          (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'", "checksum = '${{ needs.github-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
       - name: Pack
         shell: pwsh
         run: cd Streamlink; choco pack
