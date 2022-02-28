@@ -48,7 +48,7 @@ jobs:
           echo "::set-output name=exeSha::$(sha256sum new.exe | awk '{ print $1}')"
 
   chocolatey-update:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs:
       - streamlink-check
     if: ${{ needs.streamlink-check.outputs.hasNewerVersion == 'true' }}
@@ -61,9 +61,11 @@ jobs:
           echo ${{ needs.streamlink-check.outputs.hasNewerVersion }}
           echo ${{ needs.streamlink-check.outputs.exeSha }}
       - name: Update nuspec
+        shell: pwsh
         run: |
           ((Get-Content -path ./Streamlink/streamlink.nuspec -Raw) -replace '${{ needs.streamlink-check.outputs.oldVersionNumber }}','${{ needs.streamlink-check.outputs.newVersionNumber }}') | Set-Content -Path ./Streamlink/streamlink.nuspec
       - name: Update install script
+        shell: pwsh
         run: |
           (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'" "checksum = '${{ needs.streamlink-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
       - uses: EndBug/add-and-commit@v8
