@@ -16,7 +16,7 @@ $packageArgs = @{
 
   softwareName  = 'Streamlink*'
 
-  checksum = '178c3edf3d49f4e76b67e1ee9b9984eef21a079cbf1a732b99c7bc42a7eec762'
+  checksum = 'c2a2f87abf57c33cc66e3077128240a2ffae17d99a550236a2255e41fb84a29b'
   checksumType  = 'sha256'
 
   silentArgs   = '/S'
@@ -24,4 +24,5 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
+
 
