@@ -16,6 +16,13 @@ const nuspecPath = path.join(
     "Streamlink",
     "streamlink.nuspec"
 );
+const installPwshPath = path.join(
+    __dirname,
+    "..",
+    "Streamlink",
+    "tools",
+    "chocolateyinstall.ps1"
+);
 
 async function main(): Promise<void> {
     const current = getCurrentVersion();
@@ -32,6 +39,8 @@ async function main(): Promise<void> {
             hash,
             downloadUrl,
         });
+    } else {
+        console.log(`No new version available`);
     }
 }
 
@@ -51,6 +60,15 @@ async function updateStreamlinkPackage({
         `<version>${version}</version>`
     );
     fs.writeFileSync(nuspecPath, newNuspec);
+
+    let installPwsh = fs.readFileSync(installPwshPath, "utf8");
+    installPwsh = _.replace(
+        installPwsh,
+        /\$url \= .*/,
+        `$url = "${downloadUrl}"`
+    );
+    installPwsh = _.replace(installPwsh, /\$hash \= .*/, `$hash = "${hash}"`);
+    fs.writeFileSync(installPwshPath, installPwsh);
 }
 
 async function getSha256(download_url: string): Promise<string> {
