@@ -63,7 +63,7 @@ async function createNupkgAndUpload(shouldUpload: boolean) {
             });
         } catch (err) {
             console.log("output", err);
-            console.log("sdterr", err.stderr.toString());
+            console.log("sdterr", (err as any).stderr.toString());
             assert(false, "Failed to upload");
         }
     }
