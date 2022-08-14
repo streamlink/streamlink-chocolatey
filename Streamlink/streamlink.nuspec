@@ -30,5 +30,3 @@ Streamlink was forked from [Livestreamer](https://github.com/chrippa/livestreame
     <file src="tools\**" target="tools" />
   </files>
 </package>
-
-
