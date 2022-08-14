@@ -9,71 +9,20 @@ permissions:
   contents: write
 
 jobs:
-  github-check:
-    runs-on: ubuntu-latest
-    outputs:
-      newVersionNumber: ${{ steps.latest-release.outputs.result }}
-      oldVersionNumber: ${{ steps.current-version.outputs.version }}
-      hasNewerVersion: ${{ steps.has-newer-version.outputs.hasNewerVersion }}
-      exeSha: ${{ steps.generate-sha.outputs.exeSha }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get current streamlink version
-        id: current-version
-        run: |
-          echo ::set-output name=version::$(scripts/get_nuspec_verison.py ./Streamlink/streamlink.nuspec)
-      - uses: actions/github-script@v6
-        id: latest-release
-        with:
-          script: |
-            const scripts = require('./scripts/github-release.js');
-            return await scripts.latestRelease({github, context});
-          result-encoding: string
-      - name: Compare versions
-        id: has-newer-version
-        run: |
-          echo ${{steps.current-version.outputs.version}}
-          echo ${{steps.latest-release.outputs.result}}
-          echo ::set-output name=hasNewerVersion::$(scripts/has_newer_version.py "${{steps.current-version.outputs.version}}" "${{steps.latest-release.outputs.result}}")
-      - name: Get download url (failure means no file found)
-        id: download-url
-        if: ${{ steps.has-newer-version.outputs.hasNewerVersion == 'true' }}
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const scripts = require('./scripts/github-release.js');
-            return await scripts.latestReleaseUrl({github, context});
-          result-encoding: string
-      - name: Generate a sha256 checksum for the download
-        id: generate-sha
-        if: ${{ steps.has-newer-version.outputs.hasNewerVersion == 'true' }}
-        run: |
-          wget -O new.exe ${{ steps.download-url.outputs.result }}
-          echo "::set-output name=exeSha::$(sha256sum new.exe | awk '{ print $1}')"
-
-  chocolatey-update:
+  streamlink-update:
     runs-on: windows-latest
-    needs:
-      - github-check
     if: ${{ needs.github-check.outputs.hasNewerVersion == 'true' }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Update nuspec
-        shell: pwsh
-        run: |
-          ((Get-Content -path ./Streamlink/streamlink.nuspec -Raw) -replace '${{ needs.github-check.outputs.oldVersionNumber }}','${{ needs.github-check.outputs.newVersionNumber }}') | Set-Content -Path ./Streamlink/streamlink.nuspec
-      - name: Update install script
-        shell: pwsh
-        run: |
-          (Get-Content -path ./Streamlink/tools/chocolateyinstall.ps1 -Raw) -replace "checksum\s*=\s*'\S*'", "checksum = '${{ needs.github-check.outputs.exeSha }}'" | Set-Content -Path ./Streamlink/tools/chocolateyinstall.ps1
-      - name: Pack
-        shell: pwsh
-        run: cd Streamlink; choco pack
-      - name: Push
-        shell: pwsh
-        run: cd Streamlink; choco push --api-key ${{ secrets.CHOCOLATEY_API_KEY }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: yarn install
+      - name: Update package
+        run: yarn ts-node scripts/release.ts --upload
+        env:
+          CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
       - name: Commit changes back to the repository
         uses: EndBug/add-and-commit@v8
         with:
           branch: master
-          message: ${{ needs.github-check.outputs.newVersionNumber }}
+          message: Automatic version update

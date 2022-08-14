@@ -2,11 +2,12 @@ import path from "path";
 import fs from "fs";
 import { XMLParser } from "fast-xml-parser";
 import { Octokit } from "@octokit/rest";
-import { SemVer } from "semver";
 import { assert } from "ts-essentials";
 import crypto from "crypto";
 import fetch from "node-fetch";
 import _ from "lodash";
+import { program } from "commander";
+import { execSync } from "child_process";
 
 const owner = "streamlink";
 const repo = "windows-builds";
@@ -25,9 +26,13 @@ const installPwshPath = path.join(
 );
 
 async function main(): Promise<void> {
+    program.option("--upload", "Upload the new chocolatey package");
+    program.parse(process.argv);
+    const options = program.opts();
+
     const current = getCurrentVersion();
     const latest = await getLatestVersion();
-    if (current < latest.version) {
+    if (current !== latest.version) {
         console.log(`New version available!`);
 
         const downloadUrl = latest.installer.browser_download_url;
@@ -39,8 +44,21 @@ async function main(): Promise<void> {
             hash,
             downloadUrl,
         });
+
+        await createNupkgAndUpload(options.upload);
     } else {
         console.log(`No new version available`);
+    }
+}
+
+async function createNupkgAndUpload(shouldUpload: boolean) {
+    console.log("Creating nupkg...");
+    execSync("choco pack", { cwd: path.join(__dirname, "..", "Streamlink") });
+    if (shouldUpload) {
+        console.log("Uploading nupkg...");
+        execSync(`choco push --api_key ${process.env.CHOCOLATEY_API_KEY}`, {
+            cwd: path.join(__dirname, "..", "Streamlink"),
+        });
     }
 }
 
@@ -49,7 +67,7 @@ async function updateStreamlinkPackage({
     hash,
     downloadUrl,
 }: {
-    version: SemVer;
+    version: string;
     hash: string;
     downloadUrl: string;
 }) {
@@ -79,7 +97,7 @@ async function getSha256(download_url: string): Promise<string> {
     return crypto.createHash("sha256").update(input).digest("hex");
 }
 
-function getCurrentVersion(): SemVer {
+function getCurrentVersion(): string {
     const parser = new XMLParser();
 
     // synchronously read the file contents
@@ -88,7 +106,7 @@ function getCurrentVersion(): SemVer {
     const currentVersion = nuspec.package.metadata.version;
     console.log(`Current version: ${currentVersion}`);
 
-    return new SemVer(currentVersion);
+    return currentVersion;
 }
 
 async function getLatestVersion() {
@@ -111,7 +129,9 @@ async function getLatestVersion() {
 
     assert(installer);
 
-    return { version: new SemVer(latestVersion), installer };
+    // HACK: The streamlink repo will use versioning like "4.2.0-2". This is valid semver, but
+    // chocolatey/nuget/nuspec doesn't agree! So we need to replace the "-2" with a ".2".
+    return { version: _.replace(latestVersion, "-", "."), installer };
 }
 
 main();
