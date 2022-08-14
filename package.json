@@ -4,6 +4,9 @@
   "main": "index.js",
   "repository": "https://github.com/streamlink/streamlink-chocolatey.git",
   "license": "MIT",
+  "scripts": {
+    "release": "ts-node scripts/release.ts"
+  },
   "dependencies": {
     "@octokit/rest": "^19.0.3",
     "commander": "^9.4.0",
