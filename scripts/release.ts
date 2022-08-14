@@ -56,9 +56,16 @@ async function createNupkgAndUpload(shouldUpload: boolean) {
     execSync("choco pack", { cwd: path.join(__dirname, "..", "Streamlink") });
     if (shouldUpload) {
         console.log("Uploading nupkg...");
-        execSync(`choco push --api_key ${process.env.CHOCOLATEY_API_KEY}`, {
-            cwd: path.join(__dirname, "..", "Streamlink"),
-        });
+        assert(process.env.CHOCOLATEY_API_KEY, "Need an API key to upload");
+        try {
+            execSync(`choco push --api_key ${process.env.CHOCOLATEY_API_KEY}`, {
+                cwd: path.join(__dirname, "..", "Streamlink"),
+            });
+        } catch (err) {
+            console.log("output", err);
+            console.log("sdterr", err.stderr.toString());
+            assert(false, "Failed to upload");
+        }
     }
 }
 
