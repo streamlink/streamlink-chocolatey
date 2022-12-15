@@ -125,10 +125,10 @@ async function getLatestVersion() {
         // 1. The machine is Windows 7. In this case, the "py38" installer is needed
         // 2. The machine is x86. In this case, the "x86.exe" installer is needed
         // For now, I'm ignoring these scenarios to make the scripts simpler.
-        return asset.name.endsWith("py310-x86_64.exe");
+        return asset.name.endsWith("py311-x86_64.exe");
     });
 
-    assert(installer);
+    assert(installer, "could not find an installer for this release");
 
     // HACK: The streamlink repo will use versioning like "4.2.0-2". This is valid semver, but
     // chocolatey/nuget/nuspec doesn't agree! So we need to replace the "-2" with a ".2".
