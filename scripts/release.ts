@@ -111,7 +111,10 @@ function getCurrentVersion(): string {
 }
 
 async function getLatestVersion() {
-    const octokit = new Octokit({});
+    const octokit = new Octokit({
+        // Authenticated requests have a higher rate limit.
+        auth: process.env.GITHUB_TOKEN ?? undefined,
+    });
     const release = await octokit.repos.getLatestRelease({
         owner,
         repo,
