@@ -20,6 +20,7 @@ jobs:
         run: yarn ts-node scripts/release.ts --upload
         env:
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit changes back to the repository
         uses: EndBug/add-and-commit@v8
         with:
