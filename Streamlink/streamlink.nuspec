@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>streamlink</id>
-    <version>6.4.1.1</version>
+    <version>6.4.2.1</version>
     <packageSourceUrl>https://github.com/streamlink/streamlink-chocolatey</packageSourceUrl>
     <owners>Scott Walters</owners>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink/master/icon.svg</iconUrl>
