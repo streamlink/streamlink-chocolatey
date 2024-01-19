@@ -126,13 +126,13 @@ async function getLatestVersion() {
     const latestVersion = release.data.tag_name;
     console.log(`Latest version: ${latestVersion}`);
 
-    const installer = release.data.assets.find((asset) => {
-        // There are two scenarios where this isn't the correct installer:
-        // 1. The machine is Windows 7. In this case, the "py38" installer is needed
-        // 2. The machine is x86. In this case, the "x86.exe" installer is needed
-        // For now, I'm ignoring these scenarios to make the scripts simpler.
-        return asset.name.endsWith("py311-x86_64.exe");
-    });
+    const reAssetName = /^streamlink-(.+)-py(\d+)-x86_64\.exe$/;
+    const installer = release.data.assets
+        .map((asset) => reAssetName.exec(asset.name))
+        .filter(Boolean)
+        .sort((m1, m2) => parseInt(m2[2]) - parseInt(m1[2]))
+        .map((match) => match[0])
+        .shift();
 
     assert(installer, "could not find an installer for this release");
 
