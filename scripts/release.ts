@@ -34,6 +34,7 @@ async function main(): Promise<void> {
     const latest = await getLatestVersion();
     if (current !== latest.version) {
         console.log(`New version available!`);
+        console.log(`New installer file: ${latest.installer.name}`);
 
         const downloadUrl = latest.installer.browser_download_url;
         const hash = await getSha256(latest.installer.browser_download_url);
@@ -126,14 +127,25 @@ async function getLatestVersion() {
     const latestVersion = release.data.tag_name;
     console.log(`Latest version: ${latestVersion}`);
 
-    const installer = release.data.assets.find((asset) => {
-        // There are two scenarios where this isn't the correct installer:
-        // 1. The machine is Windows 7. In this case, the "py38" installer is needed
-        // 2. The machine is x86. In this case, the "x86.exe" installer is needed
-        // For now, I'm ignoring these scenarios to make the scripts simpler.
-        return asset.name.endsWith("py311-x86_64.exe");
+    // group 1 is the application version, group 2 is the python version
+    const reAssetName = /^streamlink-(.+)-py(\d+)-x86_64\.exe$/;
+
+    const installerFiles = release.data.assets.filter(
+        (asset) => asset.name.search(reAssetName) !== -1
+    );
+
+    // pick the installer with the highest python version
+    const sortedInstallerFiles = installerFiles.sort((a, b) => {
+        const aVersion = a.name.match(reAssetName)?.[2];
+        const bVersion = b.name.match(reAssetName)?.[2];
+        assert(
+            aVersion && bVersion,
+            "could not find python version, unable to compare files"
+        );
+        return parseInt(bVersion) - parseInt(aVersion);
     });
 
+    const installer = sortedInstallerFiles[0];
     assert(installer, "could not find an installer for this release");
 
     // HACK: The streamlink repo will use versioning like "4.2.0-2". This is valid semver, but
