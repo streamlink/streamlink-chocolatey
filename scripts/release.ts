@@ -34,6 +34,7 @@ async function main(): Promise<void> {
     const latest = await getLatestVersion();
     if (current !== latest.version) {
         console.log(`New version available!`);
+        console.log(`New installer file: ${latest.installer.name}`);
 
         const downloadUrl = latest.installer.browser_download_url;
         const hash = await getSha256(latest.installer.browser_download_url);
@@ -126,14 +127,25 @@ async function getLatestVersion() {
     const latestVersion = release.data.tag_name;
     console.log(`Latest version: ${latestVersion}`);
 
+    // group 1 is the application version, group 2 is the python version
     const reAssetName = /^streamlink-(.+)-py(\d+)-x86_64\.exe$/;
-    const installer = release.data.assets
-        .map((asset) => reAssetName.exec(asset.name))
-        .filter(Boolean)
-        .sort((m1, m2) => parseInt(m2[2]) - parseInt(m1[2]))
-        .map((match) => match[0])
-        .shift();
 
+    const installerFiles = release.data.assets.filter(
+        (asset) => asset.name.search(reAssetName) !== -1
+    );
+
+    // pick the installer with the highest python version
+    const sortedInstallerFiles = installerFiles.sort((a, b) => {
+        const aVersion = a.name.match(reAssetName)?.[2];
+        const bVersion = b.name.match(reAssetName)?.[2];
+        assert(
+            aVersion && bVersion,
+            "could not find python version, unable to compare files"
+        );
+        return parseInt(bVersion) - parseInt(aVersion);
+    });
+
+    const installer = sortedInstallerFiles[0];
     assert(installer, "could not find an installer for this release");
 
     // HACK: The streamlink repo will use versioning like "4.2.0-2". This is valid semver, but
