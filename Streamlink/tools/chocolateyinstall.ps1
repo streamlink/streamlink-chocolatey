@@ -6,8 +6,8 @@ If ([Environment]::OSVersion.version.major -lt '10') {
 
 $packageName = 'Streamlink'
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url = "https://github.com/streamlink/windows-builds/releases/download/6.8.3-1/streamlink-6.8.3-1-py312-x86_64.exe"
-$hash = "8b0e7957948a3f84f1613078bd3f6c6d2ad3bb3545d5d6887311267014538982"
+$url = "https://github.com/streamlink/windows-builds/releases/download/6.9.0-1/streamlink-6.9.0-1-py312-x86_64.exe"
+$hash = "b37cd387d8f204e8bd852e432bb27395af91442e2f1cabaa6d277ece9ec338f8"
 
 $packageArgs = @{
     packageName    = $packageName
