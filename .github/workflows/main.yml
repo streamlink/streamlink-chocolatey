@@ -12,7 +12,7 @@ jobs:
   streamlink-update:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with:
           node-version: lts/jod
@@ -24,7 +24,15 @@ jobs:
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit changes back to the repository
-        uses: EndBug/add-and-commit@v8
-        with:
-          branch: master
-          message: Automatic version update
+        shell: bash
+        run: |
+          if [[ -z "$(git status --porcelain)" ]]; then
+            echo No changes to be committed. Exiting...
+            exit 0
+          fi
+
+          git config --local user.name "streamlinkbot"
+          git config --local user.email "streamlinkbot@users.noreply.github.com"
+          git add .
+          git commit -m "Automatic version update"
+          git push
